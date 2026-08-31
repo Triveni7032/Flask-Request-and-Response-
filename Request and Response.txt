@@ -1,0 +1,185 @@
+# Request and Response in Flask
+
+A **request** is sent from a client to a Flask application.
+
+A **response** is the data returned by the Flask application to the client.
+
+```text
+Client
+  ↓
+Request
+  ↓
+Flask Application
+  ↓
+Response
+  ↓
+Client
+1. Request Object
+
+Flask provides the request object to access information sent by the client.
+
+from flask import Flask, request
+
+app = Flask(__name__)
+
+@app.route("/hello")
+def hello():
+    name = request.args.get("name")
+    return f"Hello {name}"
+
+Example:
+
+/hello?name=Triveni
+
+Output:
+
+Hello Triveni
+2. Query Parameters
+
+Query parameters are values passed through the URL.
+
+@app.route("/search")
+def search():
+    keyword = request.args.get("keyword")
+    return f"Searching for {keyword}"
+
+Example:
+
+/search?keyword=Python
+3. Form Data
+
+Form data can be accessed using request.form.
+
+@app.route("/login", methods=["POST"])
+def login():
+    username = request.form.get("username")
+    return f"Welcome {username}"
+4. JSON Request
+
+Flask can receive JSON data from a client.
+
+@app.route("/user", methods=["POST"])
+def user():
+    data = request.get_json()
+    return data
+
+Example JSON:
+
+{
+    "name": "Triveni",
+    "age": 22
+}
+5. Request Method
+
+request.method tells us which HTTP method was used.
+
+@app.route("/data", methods=["GET", "POST"])
+def data():
+    if request.method == "GET":
+        return "GET Request"
+
+    if request.method == "POST":
+        return "POST Request"
+6. Response
+
+A Flask function can directly return a response.
+
+@app.route("/")
+def home():
+    return "Welcome to Flask!"
+
+The returned text becomes the HTTP response.
+
+7. JSON Response
+
+jsonify() is used to return JSON responses.
+
+from flask import jsonify
+
+@app.route("/user")
+def user():
+    return jsonify({
+        "name": "Triveni",
+        "age": 22
+    })
+8. Status Codes
+
+HTTP status codes tell the client whether a request was successful.
+
+Common status codes:
+
+200 → Success
+201 → Created
+400 → Bad Request
+404 → Not Found
+500 → Server Error
+
+Example:
+
+@app.route("/created")
+def created():
+    return "User Created", 201
+9. Custom Response
+
+A response can contain data and a status code.
+
+@app.route("/success")
+def success():
+    return jsonify({
+        "message": "Operation successful"
+    }), 200
+10. Request and Response Example
+from flask import Flask, request, jsonify
+
+app = Flask(__name__)
+
+@app.route("/user", methods=["POST"])
+def user():
+
+    data = request.get_json()
+
+    name = data.get("name")
+
+    return jsonify({
+        "message": f"Hello {name}"
+    }), 200
+
+if __name__ == "__main__":
+    app.run(debug=True)
+11. Quick Summary
+request
+↓
+Access information sent by client
+
+request.args
+↓
+Get URL parameters
+
+request.form
+↓
+Get form data
+
+request.get_json()
+↓
+Get JSON data
+
+request.method
+↓
+Check HTTP method
+
+response
+↓
+Data returned to client
+
+jsonify()
+↓
+Create JSON response
+
+status code
+↓
+Indicates request result
+Conclusion
+
+Request and Response handling is an important part of Flask development.
+
+Requests allow Flask applications to receive data from clients, while responses allow applications to send data back.
